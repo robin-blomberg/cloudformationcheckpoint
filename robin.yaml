@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Academy Demo CloudFormation
+
+Parameters:
+
+  NameParameter:
+    Type: String
+    Default: Robin Blomberg
+
+
+Resources:
+
+  RobinEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-07eda9385feb1e969
+      InstanceType: t2.nano
+      SecurityGroups: [!Ref RobinSecurityGroupEC2]
+      Tags:
+        -
+          Key: Owner
+          Value: !Ref NameParameter
+
+  RobinSecurityGroupEC2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for EC2 instance
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+
+  Ec2DnsName:
+    Description: EC2 public DNS name
+    Value: !GetAtt RobinEC2Instance.PublicDnsName
